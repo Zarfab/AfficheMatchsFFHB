@@ -23,9 +23,20 @@ public void loadSettings() {
   XML[] colorsXml = settings.getChild("club").getChild("colors").getChildren("color");
   nbColors = colorsXml.length;
   colors = new color[nbColors];
+  IntList usedIds = new IntList();
   for(int i = 0; i < nbColors; i++) {
     XML c = colorsXml[i];
-    colors[i] = color(c.getInt("r"), c.getInt("g"), c.getInt("b"));
+    int id = c.getInt("id");
+    if(id < 0 && id >= nbColors) {
+      println("In 'settings.xml' : Color id not valid : " + id + ", will be ignored");
+    }
+    else if(usedIds.hasValue(id)) {
+      println("In 'settings.xml' : Color id already used : " + id + ", will be ignored");
+    }
+    else {
+      colors[id] = color(c.getInt("r"), c.getInt("g"), c.getInt("b"));
+      usedIds.append(id);
+    }
   }
 }
 

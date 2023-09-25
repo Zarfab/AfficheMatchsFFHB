@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- /!\ Fichier à renommer "settings.xml" avant de lancer le programme -->
 <settings>
 	<render>
 		<!-- dimensions de l'affiche format PNG, 1080 x 1080 pour instagram -->
