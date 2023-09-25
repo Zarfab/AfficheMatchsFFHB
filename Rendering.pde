@@ -11,7 +11,12 @@ public PImage getPoster() {
   // create PGraphics with dimensions from Settings
   PGraphics pg = createGraphics(renderW, renderH);
   pg.beginDraw();
-  //pg.background();
+  int modeInt = (mode == Mode.TO_BE_PLAYED)? TO_BE_PLAYED : RESULTS;
+  PImage bg = bgImgs[modeInt];
+  if(bg != null)
+    pg.background(bg);
+  else
+    pg.background(colors[modeInt]);
   
   pg.endDraw();
   return pg.get();

@@ -45,7 +45,7 @@
 		</colors>
 		<!-- logo du club à placer dans le même répertoire que ce fichier -->
 		<logo>logo_example.png</logo>
-		<background mode="TO_BE_PLAYED">background0_example.png</background>
-		<background mode="RESULTS">background1_example.png</background>
+		<background mode="0">background0_example.png</background>
+		<background mode="1">background1_example.png</background>
 	</club>
 </settings>

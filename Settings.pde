@@ -45,9 +45,7 @@ public void loadSettings() {
   XML[] backgrounds = settings.getChild("club").getChildren("background");
   for(XML bg : backgrounds) {
     String bgPath = bg.getContent();
-    String modeStr = bg.getString("mode");
-    int modeInt = TO_BE_PLAYED;
-    if(modeStr == "RESULTS") modeInt = RESULTS;
+    int modeInt = bg.getInt("mode");
     if(bgPath != null && bgPath != "") {
       bgImgs[modeInt] = loadImage(bgPath);
       bgImgs[modeInt].resize(renderW, renderH);
