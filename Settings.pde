@@ -4,15 +4,29 @@ color[] colors;
 int nbColors = 0;
 
 PImage logo;
-PImage[] bgImgs = new PImage[2];
-int renderW, renderH;
+
+public class ModeSettings {
+  public PImage bg;
+  public int renderW, renderH;
+  public int fontBaseSize;
+}
+
+ModeSettings[] modeSet;
 
 
 public void loadSettings() {
   XML settings = loadXML("settings.xml");
-  XML resolution = settings.getChild("render").getChild("resolution");
-  renderW = resolution.getInt("width");
-  renderH = resolution.getInt("height");
+  modeSet = new ModeSettings[2];
+  modeSet[0] = new ModeSettings();
+  modeSet[1] = new ModeSettings();
+  
+  XML[] resolutions = settings.getChild("render").getChildren("resolution");
+  for(XML resolution : resolutions) {
+    int modeInt = resolution.getInt("mode");
+    modeSet[modeInt].renderW = resolution.getInt("width");
+    modeSet[modeInt].renderH = resolution.getInt("height");
+    modeSet[modeInt].fontBaseSize = resolution.getInt("fontBaseSize");
+  }
   
   XML[] nameVariants = settings.getChild("club").getChild("name").getChildren("nameVariant");
   for(XML var : nameVariants) {
@@ -47,8 +61,8 @@ public void loadSettings() {
     String bgPath = bg.getContent();
     int modeInt = bg.getInt("mode");
     if(bgPath != null && bgPath != "") {
-      bgImgs[modeInt] = loadImage(bgPath);
-      bgImgs[modeInt].resize(renderW, renderH);
+      modeSet[modeInt].bg = loadImage(bgPath);
+      modeSet[modeInt].bg.resize(modeSet[modeInt].renderW, modeSet[modeInt].renderH);
     }
   }
 }

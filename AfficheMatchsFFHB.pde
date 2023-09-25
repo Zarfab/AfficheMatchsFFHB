@@ -12,8 +12,6 @@ int week, year;
 StringDict poolToTeam;
 String csvFilePath, csvFileFolder;
 
-PFont potato, arial, impact;
-
 
 void setup() {
   
@@ -22,12 +20,8 @@ void setup() {
   
   booster = new UiBooster(UiBoosterOptions.Theme.SWING);
   
-  potato = createFont("fonts/Potato_sans-Black.otf", 24);
-  arial = createFont("fonts/arlrdbd.ttf", 24);
-  impact = createFont("Impact", 24);
-
-  
   loadSettings();
+  loadFonts();
   loadPoolToTeam();
 
   matchTableModel = new MatchTableModel();
@@ -48,5 +42,5 @@ void draw() {
   else {
     poster.resize(0, height);
   }
-  image(poster, width/2, height/2);  
+  image(poster, width/2, height/2);
 }
