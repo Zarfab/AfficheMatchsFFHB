@@ -15,7 +15,7 @@ ModeSettings[] modeSet;
 
 
 public void loadSettings() {
-  XML settings = loadXML("settings.xml");
+  XML settings = loadXML(dataPath("settings.xml"));
   modeSet = new ModeSettings[2];
   modeSet[0] = new ModeSettings();
   modeSet[1] = new ModeSettings();

@@ -10,7 +10,13 @@ public enum FontUse {
 };
 
 public void loadFonts() {
-  
+  fonts = new ArrayList<PFont>();
+  fonts.add(createFont(dataPath("fonts/arlrdbd.ttf"), 24)); // Arial
+  String[] fontFileNames = listFileNames(dataPath("fonts"));
+  for(String f : fontFileNames) {
+    if(f.indexOf("arlrdbd") < 0)
+      fonts.add(createFont(dataPath("fonts") + "/" + f, 24));
+  }
 }
 
 
@@ -76,16 +82,35 @@ public PImage getPoster() {
   pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
   
   int fontBaseSize = modeSet[modeInt].fontBaseSize;
-  pg.fill(colors[1]);
+  pg.fill(colors[modeInt+1]);
   pg.textAlign(CENTER);
-  pg.textFont(fonts.get(0));
+  pg.textFont(getFont(FontUse.TITLE));
   pg.textSize(fontBaseSize);
   pg.text("MATCHS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
+  pg.textFont(getFont(FontUse.SUBTITLE));
   pg.textSize(fontBaseSize*0.8);
   pg.text("DOMICILE", pg.width * 0.25, pg.height * 0.3);
   pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.3);
   
-  float heightForMatchs = pg.height - logo.height * 1.5 - pg.height * 0.1;
+  pg.endDraw();
+  return pg.get();
+}
+
+
+public PImage getMatchToBePlayedImage(MatchModel match, int w, int h) {
+  PGraphics pg = createGraphics(w, h);
+  pg.beginDraw();
+  pg.background(colors[1]);
+  
+  pg.endDraw();
+  return pg.get();
+}
+
+
+public PImage getMatchResultImage(MatchModel match, int w, int h) {
+  PGraphics pg = createGraphics(w, h);
+  pg.beginDraw();
+  pg.background(colors[2]);
   
   pg.endDraw();
   return pg.get();

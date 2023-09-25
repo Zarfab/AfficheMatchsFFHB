@@ -31,9 +31,9 @@ public void loadPoolToTeam () {
   if(!f.exists()) {
     // create the file
     String[] empty = {""};
-    saveStrings("data/PoolToTeam.txt", empty);
+    saveStrings(dataPath("PoolToTeam.txt"), empty);
   }
-  String poolTeam[] = loadStrings("PoolToTeam.txt");
+  String poolTeam[] = loadStrings(dataPath("PoolToTeam.txt"));
   for(String pt : poolTeam) {
     if(pt.length() > 0 && pt.charAt(0) != '#') {
       String p_t[] = pt.split("=");
@@ -50,7 +50,7 @@ public void savePoolToTeam() {
     output[i] = pool + "=" + poolToTeam.get(pool);
     i++;
   }
-  saveStrings("data/PoolToTeam.txt", output);
+  saveStrings(dataPath("PoolToTeam.txt"), output);
 }
 
 
@@ -69,4 +69,16 @@ public boolean isSameDay(Calendar cal1, Calendar cal2) {
     return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
             && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) 
             && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+}
+
+// This function returns all the files in a directory as an array of Strings  
+public String[] listFileNames(String dir) {
+  File file = new File(dir);
+  if (file.isDirectory()) {
+    String names[] = file.list();
+    return sort(names);
+  } else {
+    // If it's not a directory
+    return null;
+  }
 }
