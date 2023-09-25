@@ -108,7 +108,8 @@ public class SettingsFrame extends JFrame implements ActionListener {
             //println("new mode : " + mode);
             break;
           case "Sauvegarder image" : 
-            String saveFile = (csvFileFolder == null? "" : csvFileFolder) + nfs(year, 4) + "-" + nfs(week, 2) + ".png"; 
+            String saveFile = (csvFileFolder == null? "" : csvFileFolder) + nfs(year, 4) + "-" + nfs(week, 2) + ".png";
+            getPoster().save(saveFile);
             booster.showInfoDialog("L'image a été sauvegardée \n" + saveFile);
             break;
           case "Quitter" : 
