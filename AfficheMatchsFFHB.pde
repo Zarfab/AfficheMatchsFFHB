@@ -12,6 +12,8 @@ int week, year;
 StringDict poolToTeam;
 String csvFilePath, csvFileFolder;
 
+PFont potato, arial, impact;
+
 
 void setup() {
   
@@ -19,6 +21,11 @@ void setup() {
   imageMode(CENTER);
   
   booster = new UiBooster(UiBoosterOptions.Theme.SWING);
+  
+  potato = createFont("fonts/Potato_sans-Black.otf", 24);
+  arial = createFont("fonts/arlrdbd.ttf", 24);
+  impact = createFont("Impact", 24);
+
   
   loadSettings();
   loadPoolToTeam();
@@ -36,10 +43,10 @@ void draw() {
   float imageAspectRatio = float(poster.width) / poster.height;
   float displayAspectRatio = float(width)/height;
   if(imageAspectRatio > displayAspectRatio) {
-    poster.resize(width, int(width*imageAspectRatio));
+    poster.resize(width, 0);
   }
   else {
-    poster.resize(int(height*imageAspectRatio), height);
+    poster.resize(0, height);
   }
   image(poster, width/2, height/2);  
 }
