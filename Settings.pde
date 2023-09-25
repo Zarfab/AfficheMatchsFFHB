@@ -3,6 +3,7 @@ StringList ignoreWords = new StringList();
 color[] colors;
 int nbColors = 0;
 
+PImage logo;
 int renderW, renderH;
 
 
@@ -38,6 +39,8 @@ public void loadSettings() {
       usedIds.append(id);
     }
   }
+  String logoPath = settings.getChild("club").getChild("logo").getContent();
+  logo = loadImage(logoPath);
 }
 
 
