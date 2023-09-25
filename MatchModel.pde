@@ -7,9 +7,9 @@ public class MatchModel implements Comparable {
   public String numPoule = "";
   public String compet = "";
   public String homeTeam;
-  public int homeScore = 0;
+  public int homeScore;
   public String awayTeam;
-  public int awayScore = 0;
+  public int awayScore;
   private Calendar cal;
   public String dateStr;
   public String hourStr;
@@ -156,10 +156,25 @@ public class MatchModel implements Comparable {
     homeTeam = atHome? teamName : clubRec;
     String clubVis = line.getString("club vis");
     awayTeam = atHome? clubVis : teamName;
+    
+    try {
+      homeScore = line.getInt("fdme rec");
+      if(homeScore == 0) homeScore = line.getInt("sc rec");
+      awayScore = line.getInt("fdme vis");
+      if(awayScore == 0) awayScore = line.getInt("sc vis");
+    }
+    catch(Exception e) {
+      //println(e);
+    }
 
-    city = capitalize(line.getString("Ville"), true);
-    street = capitalize(line.getString("adresse salle"), true);
-    hallName = capitalize(line.getString("nom salle"), true);
+    try {
+      city = capitalize(line.getString("Ville"), true);
+      street = capitalize(line.getString("adresse salle"), true);
+      hallName = capitalize(line.getString("nom salle"), true);
+    }
+    catch(Exception e) {
+      //println(e);
+    }
     
     dateStr = "-";
     hourStr = "-";

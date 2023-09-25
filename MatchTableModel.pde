@@ -46,7 +46,10 @@ public class MatchTableModel extends AbstractTableModel {
     }
     
     public void addMatchFromUrl(String url) {
-      matchs.add(new MatchModel(url));
+      MatchModel m = new MatchModel(url);
+      matchs.add(m);
+      if(week == 0) week = m.calendar().get(Calendar.WEEK_OF_YEAR);
+      if(year == 0) year = m.calendar().get(Calendar.YEAR);
       fireTableDataChanged();
     }
     
