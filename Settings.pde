@@ -4,6 +4,7 @@ color[] colors;
 int nbColors = 0;
 
 PImage logo;
+PImage[] bgImgs = new PImage[2];
 int renderW, renderH;
 
 
@@ -41,6 +42,17 @@ public void loadSettings() {
   }
   String logoPath = settings.getChild("club").getChild("logo").getContent();
   logo = loadImage(logoPath);
+  XML[] backgrounds = settings.getChild("club").getChildren("background");
+  for(XML bg : backgrounds) {
+    String bgPath = bg.getContent();
+    String modeStr = bg.getString("mode");
+    int modeInt = TO_BE_PLAYED;
+    if(modeStr == "RESULTS") modeInt = RESULTS;
+    if(bgPath != null && bgPath != "") {
+      bgImgs[modeInt] = loadImage(bgPath);
+      bgImgs[modeInt].resize(renderW, renderH);
+    }
+  }
 }
 
 
