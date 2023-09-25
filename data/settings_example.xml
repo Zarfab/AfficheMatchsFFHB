@@ -45,5 +45,5 @@
 		</colors>
 		<!-- logo du club à placer dans le même répertoire que ce fichier -->
 		<logo>logo.png</logo>
-	<club>
+	</club>
 </settings>
