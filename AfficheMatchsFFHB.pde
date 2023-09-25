@@ -12,10 +12,11 @@ int week, year;
 StringDict poolToTeam;
 String csvFilePath, csvFileFolder;
 
+
 void setup() {
   
-  size(1000, 800);
-  textSize(16);
+  size(720, 720);
+  imageMode(CENTER);
   
   booster = new UiBooster(UiBoosterOptions.Theme.SWING);
   
@@ -29,20 +30,16 @@ void setup() {
 
 
 void draw() {
-  if(mode == Mode.TO_BE_PLAYED) {
-    background(0);
-    fill(255);
+  background(0);
+  PImage poster = getPoster();
+  // resize to fit inside display window and keep original aspect ratio
+  float imageAspectRatio = float(poster.width) / poster.height;
+  float displayAspectRatio = float(width)/height;
+  if(imageAspectRatio > displayAspectRatio) {
+    poster.resize(width, int(width*imageAspectRatio));
   }
   else {
-    background(255);
-    fill(0);
+    poster.resize(int(height*imageAspectRatio), height);
   }
-
-  int i = 0;
-  MatchModel m;
-  while((m = matchTableModel.getMatch(i)) != null) {
-    text(m.toString(), 20, 20 + i * 60);
-    i++;
-  }
-  
+  image(poster, width/2, height/2);  
 }
