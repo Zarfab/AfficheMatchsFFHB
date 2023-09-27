@@ -1,5 +1,8 @@
 ArrayList<PFont> fonts;
 
+/***********************************************/
+/************* FONT MANAGEMENT *****************/
+/***********************************************/
 public enum FontUse {
   TITLE,
   SUBTITLE,
@@ -41,16 +44,21 @@ public PFont getFont(FontUse use) {
 }
 
 
+/***********************************************/
+/************ ALL POSTER DRAWING ***************/
+/***********************************************/
 public PImage getPoster() {
   int modeInt = (mode == Mode.TO_BE_PLAYED)? TO_BE_PLAYED : RESULTS;
   
   // sort matchs 
   ArrayList<MatchModel> homeMatchs = new ArrayList<MatchModel>();
   ArrayList<MatchModel> awayMatchs = new ArrayList<MatchModel>();
+  ArrayList<MatchModel> allMatchs = new ArrayList<MatchModel>();
   int i = 0;
   MatchModel m;
   while((m = matchTableModel.getMatch(i)) != null) {
     if(m.toBeDisplayed) {
+      allMatchs.add(m);
       if(m.atHome)
         homeMatchs.add(m);
       else
@@ -61,42 +69,107 @@ public PImage getPoster() {
   // sort by dates and hour
   java.util.Collections.sort(homeMatchs);
   java.util.Collections.sort(awayMatchs);
+  java.util.Collections.sort(allMatchs);
   
-  int logoSize = modeSet[modeInt].renderW / 8;
+  if(modeInt == TO_BE_PLAYED) {
+    return getPosterToBePlayed(homeMatchs, awayMatchs);
+  }
+  else if (modeInt == RESULTS) {
+    return getPosterResults(allMatchs);
+  }
+  else {
+    return null;
+  }
+}
+
+
+public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<MatchModel> awayMatchs) { 
+  int logoSize = modeSet[TO_BE_PLAYED].renderW / 8;
   if(logo.width > logo.height) 
     logo.resize(logoSize, 0);
   else
     logo.resize(0, logoSize);
-  
+    
   // create PGraphics with dimensions from Settings
-  PGraphics pg = createGraphics(modeSet[modeInt].renderW, modeSet[modeInt].renderH);
+  PGraphics pg = createGraphics(modeSet[TO_BE_PLAYED].renderW, modeSet[TO_BE_PLAYED].renderH);
   pg.beginDraw();
   
-  PImage bg = modeSet[modeInt].bg;
+  PImage bg = modeSet[TO_BE_PLAYED].bg;
   if(bg != null)
     pg.background(bg);
   else
-    pg.background(colors[modeInt]);
+    pg.background(colors[TO_BE_PLAYED]);
     
   pg.imageMode(CENTER);
   pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
   
-  int fontBaseSize = modeSet[modeInt].fontBaseSize;
-  pg.fill(colors[modeInt+1]);
+  int fontBaseSize = modeSet[TO_BE_PLAYED].fontBaseSize;
+  // Title and subtitle
+  pg.fill(colors[1]);
   pg.textAlign(CENTER);
   pg.textFont(getFont(FontUse.TITLE));
   pg.textSize(fontBaseSize);
   pg.text("MATCHS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
   pg.textFont(getFont(FontUse.SUBTITLE));
   pg.textSize(fontBaseSize*0.8);
-  pg.text("DOMICILE", pg.width * 0.25, pg.height * 0.3);
-  pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.3);
+  if(homeMatchs.size() > 0 && awayMatchs.size() == 0) {
+    pg.text("DOMICILE", pg.width * 0.5, pg.height * 0.3);
+  }
+  else if(homeMatchs.size() == 0 && awayMatchs.size() > 0) {
+    pg.text("EXTÉRIEUR", pg.width * 0.5, pg.height * 0.3);
+  }
+  else if(homeMatchs.size() > 0 && awayMatchs.size() > 0) {
+    pg.text("DOMICILE", pg.width * 0.25, pg.height * 0.3);
+    pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.3);
+  }
+  else {
+    pg.text("PAS DE MATCHS A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+  }
   
   pg.endDraw();
   return pg.get();
 }
 
 
+public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
+  int logoSize = modeSet[RESULTS].renderW / 8;
+  if(logo.width > logo.height) 
+    logo.resize(logoSize, 0);
+  else
+    logo.resize(0, logoSize);
+    
+  // create PGraphics with dimensions from Settings
+  PGraphics pg = createGraphics(modeSet[RESULTS].renderW, modeSet[RESULTS].renderH);
+  pg.beginDraw();
+  
+  PImage bg = modeSet[RESULTS].bg;
+  if(bg != null)
+    pg.background(bg);
+  else
+    pg.background(colors[RESULTS]);
+    
+  pg.imageMode(CENTER);
+  pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
+  
+  int fontBaseSize = modeSet[RESULTS].fontBaseSize;
+  // Title
+  pg.fill(colors[RESULTS+1]);
+  pg.textAlign(CENTER);
+  pg.textFont(getFont(FontUse.TITLE));
+  pg.textSize(fontBaseSize);
+  pg.text("RÉSULTATS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
+  if(allMatchs.size() == 0) {
+    pg.text("PAS DE MATCHS A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+  }
+  
+  pg.endDraw();
+  return pg.get();
+}
+
+
+/***********************************************/
+/************ SINGLE MATCH DRAWING *************/
+/***********************************************/
 public PImage getMatchToBePlayedImage(MatchModel match, int w, int h) {
   PGraphics pg = createGraphics(w, h);
   pg.beginDraw();
@@ -117,6 +190,9 @@ public PImage getMatchResultImage(MatchModel match, int w, int h) {
 }
 
 
+/***********************************************/
+/********* TEXT FORMATING FOR POSTER ***********/
+/***********************************************/
 public String getWeekendString() {
   SimpleDateFormat sdf = new SimpleDateFormat("dd");
   Calendar cal = Calendar.getInstance();
