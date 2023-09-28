@@ -68,7 +68,7 @@ public void loadSettings() {
 }
 
 
-public boolean isClubName(String str) {
+public boolean isHomeClubName(String str) {
   boolean out = false;
   for(String s : clubNames) {
     if(str.indexOf(s) >= 0) out = true;

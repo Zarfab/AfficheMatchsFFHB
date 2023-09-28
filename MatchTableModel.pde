@@ -4,6 +4,7 @@ public class MatchTableModel extends AbstractTableModel {
   
     protected String[] columnNames = new String[] { 
       "Afficher ?",
+      "A Domicile ?",
       "Equipe Domicile", 
       "Score Dom",
       "Score Ext",
@@ -16,7 +17,8 @@ public class MatchTableModel extends AbstractTableModel {
     };
     
     protected Class[] columnClasses = new Class[] { 
-      Boolean.class,   // toBedisplayed
+      Boolean.class,   // toBeDisplayed ?
+      Boolean.class,   // atHome ?
       String.class,    // homeTeam
       Integer.class,   // homeScore
       Integer.class,   // awayScore
@@ -42,7 +44,6 @@ public class MatchTableModel extends AbstractTableModel {
       for (TableRow row : table.rows()) {
         matchs.add(new MatchModel(row));
       }
-      fireTableDataChanged();
     }
     
     public void addMatchFromUrl(String url) {
@@ -50,7 +51,6 @@ public class MatchTableModel extends AbstractTableModel {
       matchs.add(m);
       if(week == 0) week = m.calendar().get(Calendar.WEEK_OF_YEAR);
       if(year == 0) year = m.calendar().get(Calendar.YEAR);
-      fireTableDataChanged();
     }
     
     
@@ -64,16 +64,17 @@ public class MatchTableModel extends AbstractTableModel {
     public Object getValueAt(int row, int col) { 
       MatchModel m = matchs.get(row); 
       switch(col) { 
-        case 0: return m.toBeDisplayed? Boolean.TRUE : Boolean.FALSE; 
-        case 1: return m.homeTeam; 
-        case 2: return m.homeScore; 
-        case 3: return m.awayScore; 
-        case 4: return m.awayTeam; 
-        case 5: return m.dateStr;
-        case 6: return m.hourStr;
-        case 7: return m.hallName;
-        case 8: return m.street;
-        case 9: return m.city;
+        case 0: return m.toBeDisplayed? Boolean.TRUE : Boolean.FALSE;
+        case 1: return m.atHome? Boolean.TRUE : Boolean.FALSE;
+        case 2: return m.homeTeam; 
+        case 3: return m.homeScore; 
+        case 4: return m.awayScore; 
+        case 5: return m.awayTeam; 
+        case 6: return m.dateStr;
+        case 7: return m.hourStr;
+        case 8: return m.hallName;
+        case 9: return m.street;
+        case 10: return m.city;
         default: return null;
       }
     }
@@ -83,15 +84,16 @@ public class MatchTableModel extends AbstractTableModel {
       MatchModel m = matchs.get(row);
       switch(col) { 
         case 0: m.toBeDisplayed = (boolean)val; break;
-        case 1: m.setHomeTeam((String)val); break;
-        case 2: m.homeScore = (Integer)val; break;
-        case 3: m.awayScore = (Integer)val; break;
-        case 4: m.setAwayTeam((String)val); break;
-        case 5: m.dateStr = (String)val; break;
-        case 6: m.hourStr = (String)val; break;
-        case 7: m.hallName = (String)val; break;
-        case 8: m.street = (String)val; break;
-        case 9: m.city = (String)val; break;
+        case 1: m.atHome = (boolean)val; break;
+        case 2: m.setHomeTeam((String)val); break;
+        case 3: m.homeScore = (Integer)val; break;
+        case 4: m.awayScore = (Integer)val; break;
+        case 5: m.setAwayTeam((String)val); break;
+        case 6: m.dateStr = (String)val; break;
+        case 7: m.hourStr = (String)val; break;
+        case 8: m.hallName = (String)val; break;
+        case 9: m.street = (String)val; break;
+        case 10: m.city = (String)val; break;
         default: break;
       }
       fireTableDataChanged();

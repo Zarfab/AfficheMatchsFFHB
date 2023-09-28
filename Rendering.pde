@@ -123,7 +123,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.3);
   }
   else {
-    pg.text("PAS DE MATCHS A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+    pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
   }
   
   pg.endDraw();
@@ -159,7 +159,7 @@ public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
   pg.textSize(fontBaseSize);
   pg.text("RÉSULTATS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
   if(allMatchs.size() == 0) {
-    pg.text("PAS DE MATCHS A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+    pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
   }
   
   pg.endDraw();

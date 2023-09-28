@@ -2,20 +2,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MatchModel implements Comparable {
-  public boolean atHome;
-  public boolean toBeDisplayed;
+  public boolean atHome = false;
+  public boolean toBeDisplayed = false;
   public String numPoule = "";
   public String compet = "";
-  public String homeTeam;
-  public int homeScore;
-  public String awayTeam;
-  public int awayScore;
+  public String homeTeam = "";
+  public int homeScore = 0;
+  public String awayTeam = "";
+  public int awayScore = 0;
   private Calendar cal;
-  public String dateStr;
-  public String hourStr;
-  public String hallName;
-  public String street;
-  public String city;
+  public String dateStr = "";
+  public String hourStr = "";
+  public String hallName = "";
+  public String street = "";
+  public String city = "";
   
   public MatchModel(String url) {
     cal = Calendar.getInstance();
@@ -47,7 +47,7 @@ public class MatchModel implements Comparable {
     }
     else {
       System.err.println("Can't load from " + url);
-      cal.set(Calendar.YEAR, 2000);
+      cal.set(Calendar.YEAR, 2020);
       cal.set(Calendar.MONTH, 1);        
       cal.set(Calendar.DAY_OF_MONTH, 1);
       cal.set(Calendar.HOUR, 0);
@@ -106,7 +106,7 @@ public class MatchModel implements Comparable {
     }
     
     // refine data for presentation
-    atHome = isClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
+    atHome = isHomeClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
     homeTeam = atHome? teamName : clubRec;
     awayTeam = atHome? clubVis : teamName;
     
@@ -152,7 +152,7 @@ public class MatchModel implements Comparable {
       teamName = "<html><font color=red>"+numPoule;
     }
     String clubRec = line.getString("club rec");
-    atHome = isClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
+    atHome = isHomeClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
     homeTeam = atHome? teamName : clubRec;
     String clubVis = line.getString("club vis");
     awayTeam = atHome? clubVis : teamName;
@@ -214,7 +214,7 @@ public class MatchModel implements Comparable {
   }
   
   public void setHomeTeam(String team) {
-    if(homeTeam.indexOf(numPoule) >= 0 && atHome) {
+    if(numPoule.length() > 0 && homeTeam.indexOf(numPoule) >= 0 && atHome) {
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
@@ -222,7 +222,7 @@ public class MatchModel implements Comparable {
   }
   
   public void setAwayTeam(String team) {
-    if(homeTeam.indexOf(numPoule) >=0 && !atHome) {
+    if(numPoule.length() > 0 && homeTeam.indexOf(numPoule) >=0 && !atHome) {
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
