@@ -238,8 +238,8 @@ public class MatchModel implements Comparable {
     try {
       sdf = new SimpleDateFormat("EEEE d MMMM yyyy H'h'mm");
       cal.setTime(sdf.parse(toParse));
-      sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-      println(sdf.format(cal.getTime()));
+      //sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+      //println(sdf.format(cal.getTime()));
       dateStr = dStr;
     }
     catch(Exception e) {
@@ -258,8 +258,8 @@ public class MatchModel implements Comparable {
     try {
       sdf = new SimpleDateFormat("EEEE d MMMM yyyy H'h'mm");
       cal.setTime(sdf.parse(toParse));
-      sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-      println(sdf.format(cal.getTime()));
+      //sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+      //println(sdf.format(cal.getTime()));
       hourStr = hStr;
     }
     catch(Exception e) {

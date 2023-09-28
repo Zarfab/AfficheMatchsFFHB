@@ -20,6 +20,9 @@ void setup() {
   
   booster = new UiBooster(UiBoosterOptions.Theme.SWING);
   
+  // init year with current value
+  Calendar cal = Calendar.getInstance();
+  year = cal.get(Calendar.YEAR);
   loadSettings();
   loadFonts();
   loadPoolToTeam();
