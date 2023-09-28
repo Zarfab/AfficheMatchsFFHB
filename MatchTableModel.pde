@@ -89,8 +89,8 @@ public class MatchTableModel extends AbstractTableModel {
         case 3: m.homeScore = (Integer)val; break;
         case 4: m.awayScore = (Integer)val; break;
         case 5: m.setAwayTeam((String)val); break;
-        case 6: m.dateStr = (String)val; break;
-        case 7: m.hourStr = (String)val; break;
+        case 6: m.setDateString((String)val); break;
+        case 7: m.setHourString((String)val); break;
         case 8: m.hallName = (String)val; break;
         case 9: m.street = (String)val; break;
         case 10: m.city = (String)val; break;

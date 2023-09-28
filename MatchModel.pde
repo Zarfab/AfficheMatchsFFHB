@@ -229,6 +229,44 @@ public class MatchModel implements Comparable {
     awayTeam = team;
   }
   
+  public void setDateString(String dStr) {
+    // parse input and update calendar
+    SimpleDateFormat sdf;
+    String toParse = dStr + " " + year;
+    if(hourStr != "") toParse += " " + hourStr;
+    else toParse += " 0h00";
+    try {
+      sdf = new SimpleDateFormat("EEEE d MMMM yyyy H'h'mm");
+      cal.setTime(sdf.parse(toParse));
+      sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+      println(sdf.format(cal.getTime()));
+      dateStr = dStr;
+    }
+    catch(Exception e) {
+      System.err.println(e);
+    }
+  }
+  
+  
+  public void setHourString(String hStr) {
+    // parse input and update calendar
+    SimpleDateFormat sdf;
+    String toParse = "";
+    if(dateStr != "") toParse += dateStr + " " + year;
+    else toParse = "Mercredi 1 janvier 2020";
+    toParse += " " + hStr;
+    try {
+      sdf = new SimpleDateFormat("EEEE d MMMM yyyy H'h'mm");
+      cal.setTime(sdf.parse(toParse));
+      sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+      println(sdf.format(cal.getTime()));
+      hourStr = hStr;
+    }
+    catch(Exception e) {
+      System.err.println(e);
+    }
+  }
+  
   
   @Override
   public int compareTo(Object other) {
