@@ -112,20 +112,64 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
   pg.text("MATCHS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
   pg.textFont(getFont(FontUse.SUBTITLE));
   pg.textSize(fontBaseSize*0.8);
+  float remainingHeight = pg.height - logo.height * 1.5 - pg.height * 0.30;
+  int matchW, matchH;
+  //int matchH = int((remainingHeight / allMatchs.size()) * 0.8);
+  //int y = int (pg.height * 0.2 + matchH/2 + matchH*0.2);
   if(homeMatchs.size() > 0 && awayMatchs.size() == 0) {
-    pg.text("DOMICILE", pg.width * 0.5, pg.height * 0.3);
+    pg.text("DOMICILE", pg.width * 0.5, pg.height * 0.28);
+    matchW = int(pg.width * 0.75);
+    matchH = int((remainingHeight / homeMatchs.size()) * 0.8);
+    int y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    for(MatchModel m : homeMatchs) {
+      pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width/2, y);
+      y += matchH / 0.8;
+    }
   }
   else if(homeMatchs.size() == 0 && awayMatchs.size() > 0) {
-    pg.text("EXTÉRIEUR", pg.width * 0.5, pg.height * 0.3);
+    pg.text("EXTÉRIEUR", pg.width * 0.5, pg.height * 0.28);
+    matchW = int(pg.width * 0.75);
+    matchH = int((remainingHeight / awayMatchs.size()) * 0.8);
+    int y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    for(MatchModel m : awayMatchs) {
+      pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width/2, y);
+      y += matchH / 0.8;
+    }
   }
   else if(homeMatchs.size() > 0 && awayMatchs.size() > 0) {
-    pg.text("DOMICILE", pg.width * 0.25, pg.height * 0.3);
-    pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.3);
+    pg.text("DOMICILE", pg.width * 0.25, pg.height * 0.28);
+    pg.text("EXTÉRIEUR", pg.width * 0.75, pg.height * 0.28);
+    
+    matchW = int(pg.width * 0.40);
+    matchH = int(remainingHeight / max(homeMatchs.size(), awayMatchs.size()) * 0.8);
+    int y;
+    int yInc = int(matchH / 0.8);;
+    
+    if(homeMatchs.size() >= awayMatchs.size()) {
+      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    }
+    else {
+      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2 +  (awayMatchs.size() - homeMatchs.size())/2 * yInc);
+    }
+    for(MatchModel m : homeMatchs) {
+      pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width * 0.25, y);
+      y += yInc;
+    }
+    
+    if(awayMatchs.size() >= homeMatchs.size()) {
+      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    }
+    else {
+      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2 +  (homeMatchs.size() - awayMatchs.size())*0.5 * yInc);;
+    }
+    for(MatchModel m : awayMatchs) {
+      pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width * 0.75, y);
+      y += yInc;
+    }
   }
   else {
-    pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+    pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.28);
   }
-  
   pg.endDraw();
   return pg.get();
 }
@@ -162,6 +206,14 @@ public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
     pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
   }
   
+  float remainingHeight = pg.height - logo.height * 1.5 - pg.height * 0.2;
+  int matchW = int(pg.width * 0.75);
+  int matchH = int((remainingHeight / allMatchs.size()) * 0.8);
+  int y = int (pg.height * 0.2 + matchH/2 + matchH*0.2);
+  for(MatchModel m : allMatchs) {
+    pg.image(getMatchResultImage(m, matchW, matchH), pg.width/2, y);
+    y += matchH / 0.8;
+  }
   pg.endDraw();
   return pg.get();
 }
@@ -174,7 +226,9 @@ public PImage getMatchToBePlayedImage(MatchModel match, int w, int h) {
   PGraphics pg = createGraphics(w, h);
   pg.beginDraw();
   pg.background(colors[1]);
-  
+  pg.fill(colors[2]);
+  pg.textAlign(CENTER);
+  pg.text(match.toString(), w/2, h/2);
   pg.endDraw();
   return pg.get();
 }
@@ -184,7 +238,9 @@ public PImage getMatchResultImage(MatchModel match, int w, int h) {
   PGraphics pg = createGraphics(w, h);
   pg.beginDraw();
   pg.background(colors[2]);
-  
+  pg.fill(colors[1]);
+  pg.textAlign(CENTER);
+  pg.text(match.toString(), w/2, h/2);
   pg.endDraw();
   return pg.get();
 }
