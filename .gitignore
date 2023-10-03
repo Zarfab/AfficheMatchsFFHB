@@ -3,8 +3,7 @@ data/temp.csv
 data/settings.xml
 data/URLParsingTable.xml
 data/logo.png
-data/background0.png
-data/background1.png
+data/bg*.png
 data/fonts/*
 
 tests/*
