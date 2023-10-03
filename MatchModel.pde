@@ -61,6 +61,7 @@ public class MatchModel implements Comparable {
     // extract data from HTML content
     String clubRec = "", clubVis = "";
     String dateInHtml = "";
+
     for(String line : html) {
       if(line.indexOf("competitions---rematch") > 0) {
         int dateIndex = line.indexOf("&quot;date&quot;:&quot;");

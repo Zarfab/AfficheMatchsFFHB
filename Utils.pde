@@ -25,6 +25,7 @@ public String capitalize(String input, boolean allWords) {
   }
 }
 
+
 public void loadPoolToTeam () {
   poolToTeam = new StringDict();
   File f = new File(dataPath("PoolToTeam.txt"));

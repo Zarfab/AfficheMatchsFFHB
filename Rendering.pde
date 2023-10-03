@@ -27,14 +27,14 @@ public PFont getFont(FontUse use) {
   switch (use) {
     case TITLE :
     case SUBTITLE :
-    case TEAM_NAME :
       if(fonts.size() > 1) return fonts.get(1);
       break;
-    case SCORE :
-      if(fonts.size() > 2) return fonts.get(2);
-      break;
+    case TEAM_NAME :
     case PLACE :
     case TIME :
+      if(fonts.size() > 2) return fonts.get(2);
+      break;
+    case SCORE :
       if(fonts.size() > 3) return fonts.get(3);
       break;
     default : break;
@@ -101,7 +101,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     pg.background(colors[TO_BE_PLAYED]);
     
   pg.imageMode(CENTER);
-  pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
+  //pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
   
   int fontBaseSize = modeSet[TO_BE_PLAYED].fontBaseSize;
   // Title and subtitle
@@ -112,7 +112,11 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
   pg.text("MATCHS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
   pg.textFont(getFont(FontUse.SUBTITLE));
   pg.textSize(fontBaseSize*0.8);
-  float remainingHeight = pg.height - logo.height * 1.5 - pg.height * 0.30;
+  float titleHeight = 0.22;
+  float logoHeight = 0.18;
+  float remainingHeight = pg.height 
+            - pg.height * titleHeight
+            - pg.height * logoHeight;
   int matchW, matchH;
   //int matchH = int((remainingHeight / allMatchs.size()) * 0.8);
   //int y = int (pg.height * 0.2 + matchH/2 + matchH*0.2);
@@ -120,7 +124,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     pg.text("DOMICILE", pg.width * 0.5, pg.height * 0.28);
     matchW = int(pg.width * 0.75);
     matchH = int((remainingHeight / homeMatchs.size()) * 0.8);
-    int y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    int y = int (pg.height * titleHeight + matchH/2 + matchH*0.2);
     for(MatchModel m : homeMatchs) {
       pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width/2, y);
       y += matchH / 0.8;
@@ -130,7 +134,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     pg.text("EXTÉRIEUR", pg.width * 0.5, pg.height * 0.28);
     matchW = int(pg.width * 0.75);
     matchH = int((remainingHeight / awayMatchs.size()) * 0.8);
-    int y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+    int y = int (pg.height * titleHeight + matchH/2 + matchH*0.2);
     for(MatchModel m : awayMatchs) {
       pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width/2, y);
       y += matchH / 0.8;
@@ -146,10 +150,10 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     int yInc = int(matchH / 0.8);;
     
     if(homeMatchs.size() >= awayMatchs.size()) {
-      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+      y = int (pg.height * titleHeight + matchH/2 + matchH*0.2);
     }
     else {
-      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2 +  (awayMatchs.size() - homeMatchs.size())/2 * yInc);
+      y = int (pg.height * titleHeight + matchH/2 + matchH*0.2 +  (awayMatchs.size() - homeMatchs.size())/2 * yInc);
     }
     for(MatchModel m : homeMatchs) {
       pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width * 0.25, y);
@@ -157,10 +161,10 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
     }
     
     if(awayMatchs.size() >= homeMatchs.size()) {
-      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2);
+      y = int (pg.height * titleHeight + matchH/2 + matchH*0.2);
     }
     else {
-      y = int (pg.height * 0.30 + matchH/2 + matchH*0.2 +  (homeMatchs.size() - awayMatchs.size())*0.5 * yInc);;
+      y = int (pg.height * titleHeight + matchH/2 + matchH*0.2 +  (homeMatchs.size() - awayMatchs.size())*0.5 * yInc);;
     }
     for(MatchModel m : awayMatchs) {
       pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width * 0.75, y);
