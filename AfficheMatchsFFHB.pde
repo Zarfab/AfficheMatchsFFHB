@@ -30,6 +30,8 @@ void setup() {
   matchTableModel = new MatchTableModel();
   settingsFrame = new SettingsFrame(matchTableModel);
   settingsFrame.showMatchTable();
+  
+  frameRate(2);
 }
 
 
