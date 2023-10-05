@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.*;
-import  java.awt.event.*;
+import java.awt.event.*;
 
 public class SettingsFrame extends JFrame implements ActionListener {
   
@@ -82,7 +82,7 @@ public class SettingsFrame extends JFrame implements ActionListener {
             if(csvFile != null) {
               csvFilePath = csvFile.getAbsolutePath();
               csvFileFolder = csvFilePath.substring(0, csvFilePath.lastIndexOf('\\') + 1);
-              println("Fichier selectionne: " + csvFilePath);
+              //println("Fichier selectionne: " + csvFilePath);
               // modify a bit the original file so that it can be handled in loadTable
               String csvFileContent[] = loadStrings(csvFilePath);
               for(int i = 0; i < csvFileContent.length; i++) {
@@ -108,7 +108,23 @@ public class SettingsFrame extends JFrame implements ActionListener {
             //println("new mode : " + mode);
             break;
           case "Sauvegarder image" : 
-            String saveFile = (csvFileFolder == null? "" : csvFileFolder) + nfs(year, 4) + "-" + nfs(week, 2) + ".png";
+            String saveFile = (csvFileFolder == null? "" : csvFileFolder) 
+                              + nf(year, 4) 
+                              + "-" + nf(week, 2) 
+                              + (mode == Mode.RESULTS ? "_resultats" : "")
+                              + ".png";
+            int it = 1;
+            File f = new File(saveFile);
+            while(f.exists()) {
+              saveFile = (csvFileFolder == null? "" : csvFileFolder) 
+                              + nf(year, 4) 
+                              + "-" + nf(week, 2) 
+                              + (mode == Mode.RESULTS ? "_resultats" : "")
+                              + "_" + it
+                              + ".png";
+              f = new File(saveFile);
+              it++;
+            }
             getPoster().save(saveFile);
             booster.showInfoDialog("L'image a été sauvegardée \n" + saveFile);
             break;
