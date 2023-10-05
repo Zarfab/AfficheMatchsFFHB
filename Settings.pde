@@ -3,7 +3,7 @@ StringList ignoreWords = new StringList();
 color[] colors;
 int nbColors = 0;
 
-PImage logo;
+PImage logo, logoOrg;
 
 public class ModeSettings {
   public PImage bg;
@@ -56,6 +56,7 @@ public void loadSettings() {
   }
   String logoPath = settings.getChild("club").getChild("logo").getContent();
   logo = loadImage(logoPath);
+  logoOrg = loadImage(logoPath);
   XML[] backgrounds = settings.getChild("club").getChildren("background");
   for(XML bg : backgrounds) {
     String bgPath = bg.getContent();

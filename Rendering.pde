@@ -72,7 +72,8 @@ public PImage getPoster() {
   java.util.Collections.sort(allMatchs);
   
   if(modeInt == TO_BE_PLAYED) {
-    return getPosterToBePlayed(homeMatchs, awayMatchs);
+    //return getPosterToBePlayed(homeMatchs, awayMatchs);
+    return getPosterToBePlayed(allMatchs);
   }
   else if (modeInt == RESULTS) {
     return getPosterResults(allMatchs);
@@ -82,7 +83,7 @@ public PImage getPoster() {
   }
 }
 
-
+/*
 public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<MatchModel> awayMatchs) { 
   int logoSize = modeSet[TO_BE_PLAYED].renderW / 8;
   if(logo.width > logo.height) 
@@ -177,10 +178,61 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
   pg.endDraw();
   return pg.get();
 }
+*/
+
+public PImage getPosterToBePlayed(ArrayList<MatchModel> allMatchs) {
+  int logoSize = modeSet[TO_BE_PLAYED].renderW / 4;
+  if(logo.width > logo.height) 
+    logo.resize(logoSize, 0);
+  else
+    logo.resize(0, logoSize);
+  // create PGraphics with dimensions from Settings
+  PGraphics pg = createGraphics(modeSet[TO_BE_PLAYED].renderW, modeSet[TO_BE_PLAYED].renderH);
+  pg.beginDraw();
+  
+  PImage bg = modeSet[TO_BE_PLAYED].bg;
+  if(bg != null)
+    pg.background(bg);
+  else
+    pg.background(colors[TO_BE_PLAYED]);
+    
+  pg.imageMode(CENTER);
+  pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
+  
+  int fontBaseSize = modeSet[TO_BE_PLAYED].fontBaseSize;
+  // Title and subtitle
+  pg.fill(colors[1]);
+  pg.textAlign(CENTER);
+  pg.textFont(getFont(FontUse.TITLE));
+  pg.textSize(fontBaseSize);
+  pg.text("MATCH"+ (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND", pg.width/2, pg.height * 0.12);
+  pg.text(getWeekendString(), pg.width/2, pg.height * 0.20);
+  pg.textFont(getFont(FontUse.SUBTITLE));
+  float titleHeight = 0.22 * pg.height;
+  float logoHeight = logo.height * 1.5;
+  float matchImageProp = 0.8;
+  float remainingHeight = pg.height 
+            - titleHeight
+            - logoHeight;
+  int matchW = int(pg.width * 0.82);
+  int matchH = min(int((remainingHeight / allMatchs.size()) * matchImageProp), 
+                    int((remainingHeight / 4) * matchImageProp));
+  int y = int (titleHeight + matchH/2 + matchH*0.2);
+  if(allMatchs.size() == 0) {
+    pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
+  }
+  
+  for(MatchModel m : allMatchs) {
+    pg.image(getMatchToBePlayedImage(m, matchW, matchH), pg.width/2, y);
+    y += matchH / matchImageProp; // * 4/(min(allMatchs.size(), 4));
+  }
+  pg.endDraw();
+  return pg.get();
+}
 
 
 public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
-  int logoSize = modeSet[RESULTS].renderW / 8;
+  int logoSize = modeSet[RESULTS].renderW / 4;
   if(logo.width > logo.height) 
     logo.resize(logoSize, 0);
   else
@@ -201,22 +253,27 @@ public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
   
   int fontBaseSize = modeSet[RESULTS].fontBaseSize;
   // Title
-  pg.fill(colors[RESULTS+1]);
+  pg.fill(colors[1]);
   pg.textAlign(CENTER);
   pg.textFont(getFont(FontUse.TITLE));
   pg.textSize(fontBaseSize);
-  pg.text("RÉSULTATS DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
+  pg.text("RÉSULTAT" + (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
   if(allMatchs.size() == 0) {
     pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
   }
-  
-  float remainingHeight = pg.height - logo.height * 1.5 - pg.height * 0.2;
-  int matchW = int(pg.width * 0.75);
-  int matchH = int((remainingHeight / allMatchs.size()) * 0.8);
-  int y = int (pg.height * 0.2 + matchH/2 + matchH*0.2);
+  float titleHeight = 0.24 * pg.height;
+  float logoHeight = logo.height * 1.5;
+  float matchImageProp = 0.7;
+  float remainingHeight = pg.height 
+            - titleHeight
+            - logoHeight;
+  int matchW = int(pg.width * 0.92);
+  int matchH = min(int((remainingHeight / allMatchs.size()) * matchImageProp), 
+                    int((remainingHeight / 6) * matchImageProp));
+  int y = int (titleHeight + matchH/2 + matchH*0.2);
   for(MatchModel m : allMatchs) {
     pg.image(getMatchResultImage(m, matchW, matchH), pg.width/2, y);
-    y += matchH / 0.8;
+    y += (matchH / matchImageProp) * 6/(min(allMatchs.size(), 6));
   }
   pg.endDraw();
   return pg.get();
@@ -228,11 +285,52 @@ public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
 /***********************************************/
 public PImage getMatchToBePlayedImage(MatchModel match, int w, int h) {
   PGraphics pg = createGraphics(w, h);
+  float rectPadding = 0;
+  float rectTop = 0.5 * h;
+  float rectBottom = h;
+  float vsTriangle = 0.12 * h;
   pg.beginDraw();
-  pg.background(colors[1]);
-  pg.fill(colors[2]);
+  pg.noStroke();
+  if(match.atHome) {
+    pg.fill(colors[2]);
+    pg.quad(w/2-vsTriangle, rectTop, w-2*vsTriangle, rectTop, w, rectBottom, w/2+vsTriangle, rectBottom);
+    pg.fill(colors[1]);
+    pg.quad(0, rectTop, w/2-vsTriangle, rectTop, w/2+vsTriangle, rectBottom, 2*vsTriangle, rectBottom);
+  }
+  else {
+    pg.fill(colors[2]);
+    pg.quad(0, rectTop, w/2-vsTriangle, rectTop, w/2+vsTriangle, rectBottom, 2*vsTriangle, rectBottom);
+    pg.fill(colors[1]);
+    pg.quad(w/2-vsTriangle, rectTop, w-2*vsTriangle, rectTop, w, rectBottom, w/2+vsTriangle, rectBottom);
+  }
+   
+  int textSize = int((rectBottom-rectTop) * 0.5); 
+  String homeTeam = removeHTML(match.homeTeam);
+  String awayTeam = removeHTML(match.awayTeam);
+  int widthForTeamNames = int(w/2 - 2*vsTriangle);
+  pg.textFont(getFont(FontUse.TEAM_NAME));
+  if(match.atHome) pg.fill(colors[0]);
+  else pg.fill(colors[1]);
+  pg.textSize(fitTextInSpace(pg, homeTeam, textSize, widthForTeamNames, h));
+  pg.textAlign(CENTER, CENTER);
+  pg.text(homeTeam, w/4+rectPadding, (rectBottom+rectTop) / 2);
+  if(match.atHome) pg.fill(colors[1]);
+  else pg.fill(colors[0]);
+  pg.textSize(fitTextInSpace(pg, awayTeam, textSize, widthForTeamNames, h));
+  pg.textAlign(CENTER, CENTER);
+  pg.text(awayTeam, 3*w/4-rectPadding, (rectBottom+rectTop) / 2);
+  
+  pg.fill(colors[1]);
+  pg.textFont(getFont(FontUse.TIME));
+  String placeAndDateStr = match.dateStr.toUpperCase() + " | " 
+                           + match.hourStr + " | "
+                           + match.hallName.toUpperCase() + ", "
+                           + match.city.toUpperCase();
+  int placeAndDateSize = fitTextInSpace(pg, placeAndDateStr, textSize, int(w-4*vsTriangle), int(rectTop));
+  pg.textSize(placeAndDateSize);
   pg.textAlign(CENTER);
-  pg.text(match.toString(), w/2, h/2);
+  pg.text(placeAndDateStr, w/2, rectTop-vsTriangle);
+  
   pg.endDraw();
   return pg.get();
 }
@@ -240,12 +338,59 @@ public PImage getMatchToBePlayedImage(MatchModel match, int w, int h) {
 
 public PImage getMatchResultImage(MatchModel match, int w, int h) {
   PGraphics pg = createGraphics(w, h);
+  float vsTriangle = 0.15 * h;						  
   pg.beginDraw();
-  pg.background(colors[2]);
+  //pg.background(colors[2]);
+  pg.noStroke();
+  if(match.atHome) {
+    pg.fill(colors[3]);
+    pg.quad(w/2-vsTriangle, 0, w-2*vsTriangle, 0, w, h, w/2+vsTriangle, h);
+    pg.fill(colors[1]);
+    pg.quad(0, 0, w/2-vsTriangle, 0, w/2+vsTriangle, h, 2*vsTriangle, h);
+  }
+  else {
+    pg.fill(colors[3]);
+    pg.quad(0, 0, w/2-vsTriangle, 0, w/2+vsTriangle, h, 2*vsTriangle, h);
+    pg.fill(colors[1]);
+    pg.quad(w/2-vsTriangle, 0, w-2*vsTriangle, 0, w, h, w/2+vsTriangle, h);
+  }
+  
+  // display score
+  float scoreRectH = h * 0.8;
+  float scoreRectW = scoreRectH*1.2;
+  pg.fill(colors[2]);
+  pg.rectMode(CENTER);
+  pg.rect(w/2-scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
+  pg.rect(w/2+scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
+  
+  int textSize = int((h) * 0.42);
+  pg.textFont(getFont(FontUse.SCORE));
   pg.fill(colors[1]);
-  pg.textAlign(CENTER);
-  pg.text(match.toString(), w/2, h/2);
+  pg.textSize(fitTextInSpace(pg, "44", 100, int(scoreRectW*0.8), int(scoreRectH*0.8)));
+  pg.textAlign(CENTER, CENTER);
+  pg.text(match.homeScore, w/2-scoreRectW*0.75, h/2);
+  pg.text(match.awayScore, w/2+scoreRectW*0.75, h/2);
+  
+  pg.fill(colors[3]);
+  pg.textFont(getFont(FontUse.TEAM_NAME));
+
+  
+  String homeTeam = removeHTML(match.homeTeam);
+  String awayTeam = removeHTML(match.awayTeam);
+  int widthForTeamNames = int(w/2 - scoreRectW*1.8);
+  if(match.atHome) pg.fill(colors[3]);
+  else pg.fill(colors[1]);
+  pg.textSize(fitTextInSpace(pg, homeTeam, textSize, widthForTeamNames, int(h*0.8)));
+  pg.textAlign(CENTER, CENTER);
+  pg.text(homeTeam, w/4-scoreRectW*0.5, h*0.5);
+  if(match.atHome) pg.fill(colors[1]);
+  else pg.fill(colors[3]);
+  pg.textSize(fitTextInSpace(pg, awayTeam, textSize, widthForTeamNames, int(h*0.8)));
+  pg.textAlign(CENTER, CENTER);
+  pg.text(awayTeam, 3*w/4+scoreRectW*0.5, h*0.5);
+  
   pg.endDraw();
+
   return pg.get();
 }
 
@@ -270,4 +415,18 @@ public String getWeekendString() {
   }
   weekendString += sdf.format(cal.getTime());
   return weekendString;
+}
+
+
+public int fitTextInSpace(PGraphics pg, String text, int sizeInit, int w, int h) {
+  int fitSizeW = sizeInit;
+  pg.pushStyle();
+  pg.textSize(sizeInit);
+  while(pg.textWidth(text) > w) {
+    fitSizeW--;
+    pg.textSize(fitSizeW);
+  }
+  pg.popStyle();
+  int fitSize = min(h, fitSizeW);
+  return fitSize;
 }

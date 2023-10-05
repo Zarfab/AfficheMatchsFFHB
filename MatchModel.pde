@@ -27,21 +27,31 @@ public class MatchModel implements Comparable {
         String teamName = "<html><font color=orange>";
         // try to find team name from parsing URL
         String[] splitUrl = cleanUrl.split("/");
-        for(String s : splitUrl) {
-          if(s.indexOf("championnat") >= 0 || s.indexOf("c59") >= 0 ) {
-               if(s.indexOf("11-ans") >= 0 || s.indexOf("u11") >= 0) teamName += "U11";
-               else if(s.indexOf("13-ans") >= 0 || s.indexOf("u13") >= 0) teamName += "U13";
-               else if(s.indexOf("15-ans") >= 0 || s.indexOf("u15") >= 0) teamName += "U15";
-               else if(s.indexOf("18-ans") >= 0 || s.indexOf("u18") >= 0) teamName += "U18";
-               else teamName += "SENIORS";
-               
-               if(s.indexOf("fem") >= 0) teamName += " F";
-               else if(s.indexOf("mas") >= 0) teamName += " M";
-               else if(s.indexOf("mixte") >= 0) teamName += " MIXTE";
-               
-               if(s.indexOf("coupe") >= 0) teamName += " (Coupe)";
+        int compIndex = 0;
+        for(int i = 0; i < splitUrl.length; i++) {
+          String urlPart = splitUrl[i];
+          if(urlPart.indexOf("departemental") >= 0 ||
+            urlPart.indexOf("regional") >= 0 ||
+            urlPart.indexOf("national") >= 0 ||
+            urlPart.indexOf("coupe-de-france") >= 0 ) {
+            compIndex = i+1;
+            break;
           }
         }
+        
+        String s = splitUrl[compIndex];
+         if(s.indexOf("moins-de-11") >= 0 || s.indexOf("11-ans") >= 0 || s.indexOf("u11") >= 0) teamName += "U11";
+         else if(s.indexOf("moins-de-13") >= 0 || s.indexOf("13-ans") >= 0 || s.indexOf("u13") >= 0) teamName += "U13";
+         else if(s.indexOf("moins-de-15") >= 0 || s.indexOf("15-ans") >= 0 || s.indexOf("u15") >= 0) teamName += "U15";
+         else if(s.indexOf("moins-de-18") >= 0 || s.indexOf("18-ans") >= 0 || s.indexOf("u18") >= 0) teamName += "U18";
+         else teamName += "SENIORS";
+         
+         if(s.indexOf("fem") >= 0) teamName += " F";
+         else if(s.indexOf("mas") >= 0) teamName += " M";
+         else if(s.indexOf("mixte") >= 0) teamName += " MIXTE";
+         
+         if(s.indexOf("coupe") >= 0) teamName += " (Coupe)";
+
         println("Load data from URL : " + cleanUrl + ", detected team : " + removeHTML(teamName));
         loadFromURL(cleanUrl, teamName);
     }
