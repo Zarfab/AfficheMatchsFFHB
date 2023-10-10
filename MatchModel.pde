@@ -225,7 +225,9 @@ public class MatchModel implements Comparable {
   }
   
   public void setHomeTeam(String team) {
-    if(numPoule.length() > 0 && homeTeam.indexOf(numPoule) >= 0 && atHome) {
+    //println("set home team : " + team);
+    if(numPoule.length() > 0 && atHome) {
+      //println("    set new entry in poolToTeam : " + numPoule + ", " + team);
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
@@ -233,7 +235,9 @@ public class MatchModel implements Comparable {
   }
   
   public void setAwayTeam(String team) {
-    if(numPoule.length() > 0 && homeTeam.indexOf(numPoule) >=0 && !atHome) {
+    //println("set away team : " + team);
+    if(numPoule.length() > 0 && !atHome) {
+      //println("    set new entry in poolToTeam : " + numPoule + ", " + team);
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
@@ -276,6 +280,42 @@ public class MatchModel implements Comparable {
     catch(Exception e) {
       System.err.println(e);
     }
+  }
+  
+  public void addRowToTable(Table table) {
+    TableRow row = table.addRow();
+    row.setString("semaine", year + "-" + nf(week, 2));
+    row.setString("num poule", numPoule);
+    row.setString("competition", compet);
+    row.setString("le", getDateString());
+    row.setString("horaire", getTimeString());  
+    row.setString("club rec", getHomeTeamForCsv());
+    row.setString("club vis", getAwayTeamForCsv());
+    row.setString("nom salle", hallName);
+    row.setString("adresse salle", street);
+    row.setString("Ville", city);
+    row.setInt("fdme rec", homeScore);
+    row.setInt("fdme vis", awayScore);
+  }
+  
+  public String getDateString() {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    return  sdf.format(cal.getTime());
+  }
+  
+  public String getTimeString() {
+    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    return  sdf.format(cal.getTime());
+  }
+  
+  public String getHomeTeamForCsv() {
+    if(!atHome) return awayTeam;
+    else return clubNames.get(0) + awayTeam;
+  }
+  
+  public String getAwayTeamForCsv() {
+    if(!atHome) return homeTeam;
+    else return clubNames.get(0) + homeTeam;
   }
   
   

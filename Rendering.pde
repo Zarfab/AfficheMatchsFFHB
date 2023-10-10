@@ -181,7 +181,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> homeMatchs, ArrayList<Ma
 */
 
 public PImage getPosterToBePlayed(ArrayList<MatchModel> allMatchs) {
-  int logoSize = modeSet[TO_BE_PLAYED].renderW / 4;
+  int logoSize = modeSet[TO_BE_PLAYED].renderW / 6;
   if(logo.width > logo.height) 
     logo.resize(logoSize, 0);
   else
@@ -205,9 +205,10 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> allMatchs) {
   pg.textAlign(CENTER);
   pg.textFont(getFont(FontUse.TITLE));
   pg.textSize(fontBaseSize);
-  pg.text("MATCH"+ (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND", pg.width/2, pg.height * 0.12);
-  pg.text(getWeekendString(), pg.width/2, pg.height * 0.20);
+  pg.text("MATCH"+ (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND", pg.width/2, pg.height * 0.10);
+  pg.text(getWeekendString(), pg.width/2, pg.height * 0.18);
   pg.textFont(getFont(FontUse.SUBTITLE));
+  pg.textSize(fontBaseSize);
   float titleHeight = 0.22 * pg.height;
   float logoHeight = logo.height * 1.5;
   float matchImageProp = 0.8;
@@ -232,7 +233,7 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> allMatchs) {
 
 
 public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
-  int logoSize = modeSet[RESULTS].renderW / 4;
+  int logoSize = modeSet[RESULTS].renderW / 6;
   if(logo.width > logo.height) 
     logo.resize(logoSize, 0);
   else
@@ -257,11 +258,12 @@ public PImage getPosterResults(ArrayList<MatchModel> allMatchs) {
   pg.textAlign(CENTER);
   pg.textFont(getFont(FontUse.TITLE));
   pg.textSize(fontBaseSize);
-  pg.text("RÉSULTAT" + (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND\n" + getWeekendString(), pg.width/2, pg.height * 0.1);
+  pg.text("RÉSULTAT" + (allMatchs.size() > 1 ? "S" : "") + " DU WEEKEND", pg.width/2, pg.height * 0.1);
+  pg.text(getWeekendString(), pg.width/2, pg.height * 0.18);
   if(allMatchs.size() == 0) {
     pg.text("PAS DE MATCH A AFFICHER", pg.width * 0.5, pg.height * 0.3);
   }
-  float titleHeight = 0.24 * pg.height;
+  float titleHeight = 0.22 * pg.height;
   float logoHeight = logo.height * 1.5;
   float matchImageProp = 0.7;
   float remainingHeight = pg.height 

@@ -38,9 +38,15 @@ public class SettingsFrame extends JFrame implements ActionListener {
     addFromUrl.setEnabled(true);
     addFromUrl.addActionListener(this);
 
-    JButton removeRow = new JButton("Supprimer");
+    JButton removeRow = new JButton("Supprimer la ligne");
     removeRow.setEnabled(true);
     removeRow.addActionListener(this);
+    
+    JButton saveCsv = new JButton("Enregistrer le tableau");
+    saveCsv.addActionListener(this);
+    
+    JButton delTable = new JButton("Supprimer tout");
+    delTable.addActionListener(this);
     
     JButton modeBut = new JButton("Mode");
     modeBut.addActionListener(this);
@@ -51,13 +57,19 @@ public class SettingsFrame extends JFrame implements ActionListener {
     JButton exitBut = new JButton("Quitter");
     exitBut.addActionListener(this);
 
-    JPanel buttonPanel = new JPanel(new GridLayout(3, 3));
+    JPanel buttonPanel = new JPanel(new GridLayout(4, 3));
     buttonPanel.add(addFromCsv);
     buttonPanel.add(addFromUrl);
     buttonPanel.add(removeRow);
+
+    buttonPanel.add(saveCsv);
     buttonPanel.add(new JLabel());
-    buttonPanel.add(new JLabel ());
-    buttonPanel.add(new JLabel ());
+    buttonPanel.add(delTable);
+    
+    buttonPanel.add(new JLabel());
+    buttonPanel.add(new JLabel());
+    buttonPanel.add(new JLabel());
+    
     buttonPanel.add(modeBut);
     buttonPanel.add(saveBut);
     buttonPanel.add(exitBut);
@@ -90,6 +102,7 @@ public class SettingsFrame extends JFrame implements ActionListener {
                 csvFileContent[i] = csvFileContent[i].replaceAll("\"", "");
               }
               saveStrings("data/temp.csv", csvFileContent);
+              loadPoolToTeam();
               model.parseCsvFile("temp.csv");
               model.fireTableDataChanged();
             }
@@ -99,9 +112,35 @@ public class SettingsFrame extends JFrame implements ActionListener {
             model.addMatchFromUrl(url);
             model.fireTableDataChanged();
             break;
-          case "Supprimer": 
+          case "Enregistrer le tableau":
+            File file = booster.showFileSelection();
+            String filePath = file.getAbsolutePath();
+            if(!filePath.endsWith(".csv")) {
+              filePath += ".csv";
+            }
+            model.saveTableAsCsv(filePath);
+            booster.showInfoDialog("Le tableau a été sauvegardé sous\n" + filePath);
+            break;
+          case "Supprimer la ligne": 
             model.removeRow(table.getSelectedRow());
             model.fireTableDataChanged();
+            break;
+          case "Supprimer tout":
+              booster.showConfirmDialog(
+                "Voulez-vous vraiment effacer toute la table ?",
+                "Supprimer tout",
+                new Runnable() {
+                    public void run() {
+                       model.clear();
+                       model.fireTableDataChanged();
+                    }
+                },
+                new Runnable() {
+                    public void run() {
+                        ;
+                    }
+                }
+            );
             break;
           case "Mode":
             mode = (mode == Mode.TO_BE_PLAYED? Mode.RESULTS : Mode.TO_BE_PLAYED);

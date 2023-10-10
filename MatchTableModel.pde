@@ -110,6 +110,32 @@ public class MatchTableModel extends AbstractTableModel {
         matchs.remove(row);
     }
     
+    public void clear() {
+      matchs.clear();
+    }
+    
+    
+    public void saveTableAsCsv(String fileName) {
+      Table table = new Table();
+      table.addColumn("semaine", Table.STRING);
+      table.addColumn("num poule", Table.STRING);
+      table.addColumn("competition", Table.STRING);
+      table.addColumn("le", Table.STRING);
+      table.addColumn("horaire", Table.STRING);
+      table.addColumn("club rec", Table.STRING);
+      table.addColumn("club vis", Table.STRING);
+      table.addColumn("nom salle", Table.STRING);
+      table.addColumn("adresse salle", Table.STRING);
+      table.addColumn("Ville", Table.STRING);
+      table.addColumn("fdme rec", Table.INT);
+      table.addColumn("fdme vis", Table.INT);
+      
+      for(MatchModel m : matchs) {
+        m.addRowToTable(table);
+      }
+      saveTable(table, fileName);
+    }
+    
     @Override
     public boolean isCellEditable(int row, int col)
     {
