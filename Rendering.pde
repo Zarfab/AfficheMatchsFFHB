@@ -360,14 +360,24 @@ public PImage getMatchResultImage(MatchModel match, int w, int h) {
   // display score
   float scoreRectH = h * 0.8;
   float scoreRectW = scoreRectH*1.2;
-  pg.fill(colors[2]);
+  pg.stroke(0);
+  pg.strokeWeight(4);
   pg.rectMode(CENTER);
+  // home score rect
+  if(match.homeScore > match.awayScore) pg.fill(colorWin);
+  else if(match.homeScore < match.awayScore) pg.fill(colorLoose);
+  else pg.fill(colorDraw);
   pg.rect(w/2-scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
+  // away score rect
+  if(match.homeScore < match.awayScore) pg.fill(colorWin);
+  else if(match.homeScore > match.awayScore) pg.fill(colorLoose);
+  else pg.fill(colorDraw);
   pg.rect(w/2+scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
+  pg.noStroke();
   
   int textSize = int((h) * 0.42);
   pg.textFont(getFont(FontUse.SCORE));
-  pg.fill(colors[1]);
+  pg.fill(0);
   pg.textSize(fitTextInSpace(pg, "44", 100, int(scoreRectW*0.8), int(scoreRectH*0.8)));
   pg.textAlign(CENTER, CENTER);
   pg.text(match.homeScore, w/2-scoreRectW*0.75, h/2);
