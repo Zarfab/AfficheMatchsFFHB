@@ -163,10 +163,26 @@ public class MatchModel implements Comparable {
       teamName = "<html><font color=red>"+numPoule;
     }
     String clubRec = line.getString("club rec");
-    atHome = isHomeClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
-    homeTeam = (atHome && removeHTML(teamName) != "")? teamName : clubRec;
     String clubVis = line.getString("club vis");
-    awayTeam = (atHome || removeHTML(teamName) != "")? clubVis : teamName;
+    atHome = isHomeClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
+    if(atHome) {
+      awayTeam = clubVis; 
+      if(removeHTML(teamName).isEmpty()) {
+        homeTeam = teamName + clubRec;
+      }
+      else {
+        homeTeam = teamName;
+      }
+    }
+    else {
+      homeTeam = clubRec;
+      if(removeHTML(teamName).isEmpty()) {
+        awayTeam = teamName + clubVis;
+      }
+      else {
+        awayTeam = teamName;
+      }
+    }
     
     try {
       homeScore = line.getInt("fdme rec");
