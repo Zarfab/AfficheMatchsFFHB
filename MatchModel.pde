@@ -164,9 +164,9 @@ public class MatchModel implements Comparable {
     }
     String clubRec = line.getString("club rec");
     atHome = isHomeClubName(clubRec.toLowerCase()) && !shouldIgnore(clubRec.toLowerCase());
-    homeTeam = atHome? teamName : clubRec;
+    homeTeam = (atHome && removeHTML(teamName) != "")? teamName : clubRec;
     String clubVis = line.getString("club vis");
-    awayTeam = atHome? clubVis : teamName;
+    awayTeam = (atHome || removeHTML(teamName) != "")? clubVis : teamName;
     
     try {
       homeScore = line.getInt("fdme rec");
@@ -225,9 +225,7 @@ public class MatchModel implements Comparable {
   }
   
   public void setHomeTeam(String team) {
-    //println("set home team : " + team);
     if(numPoule.length() > 0 && atHome) {
-      //println("    set new entry in poolToTeam : " + numPoule + ", " + team);
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
@@ -235,9 +233,7 @@ public class MatchModel implements Comparable {
   }
   
   public void setAwayTeam(String team) {
-    //println("set away team : " + team);
     if(numPoule.length() > 0 && !atHome) {
-      //println("    set new entry in poolToTeam : " + numPoule + ", " + team);
       poolToTeam.set(numPoule, team);
       savePoolToTeam();
     }
@@ -308,14 +304,14 @@ public class MatchModel implements Comparable {
     return  sdf.format(cal.getTime());
   }
   
-  public String getHomeTeamForCsv() {
-    if(!atHome) return awayTeam;
-    else return clubNames.get(0) + awayTeam;
+  public String getAwayTeamForCsv() {
+    if(atHome) return awayTeam;
+    else return clubNames.get(0) + " " + removeHTML(awayTeam);
   }
   
-  public String getAwayTeamForCsv() {
+  public String getHomeTeamForCsv() {
     if(!atHome) return homeTeam;
-    else return clubNames.get(0) + homeTeam;
+    else return clubNames.get(0) + " " + removeHTML(homeTeam);
   }
   
   
@@ -325,6 +321,7 @@ public class MatchModel implements Comparable {
     int calComp = cal.compareTo(otherMatchModel.cal);
     return calComp;
   }
+  
   
   @Override
   public String toString() {
