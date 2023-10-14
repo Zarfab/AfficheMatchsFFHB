@@ -2,9 +2,6 @@ StringList clubNames = new StringList();
 StringList ignoreWords = new StringList();
 color[] colors;
 int nbColors = 0;
-color colorWin = color(196, 255, 196);
-color colorDraw = color(196);
-color colorLoose = color(255, 204, 172);
 
 PImage logo, logoOrg;
 

@@ -36,12 +36,13 @@
 			<ignore>autre club avec nom ressemblant</ignore>
 		</name>
 		<colors>
-			<!-- couleurs à utiliser pour les affiches, 
+			<!-- les 5 couleurs à utiliser pour les affiches, 
 				 la couleur avec l'id 0 sera la plus présente, puis l'id 1 etc.-->
 			<color id = "0" r="255" g="000" b="000"/>
 			<color id = "1" r="255" g="255" b="255"/>
 			<color id = "2" r="000" g="000" b="000"/>
 			<color id = "3" r="064" g="064" b="064"/>
+			<color id = "4" r="180" g="180" b="180"/>
 		</colors>
 		<!-- logo du club à placer dans le même répertoire que ce fichier -->
 		<logo>logo_example.png</logo>

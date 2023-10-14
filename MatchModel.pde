@@ -320,14 +320,14 @@ public class MatchModel implements Comparable {
     return  sdf.format(cal.getTime());
   }
   
-  public String getAwayTeamForCsv() {
-    if(atHome) return awayTeam;
-    else return clubNames.get(0) + " " + removeHTML(awayTeam);
-  }
-  
   public String getHomeTeamForCsv() {
     if(!atHome) return homeTeam;
     else return clubNames.get(0) + " " + removeHTML(homeTeam);
+  }
+  
+  public String getAwayTeamForCsv() {
+    if(atHome) return awayTeam;
+    else return clubNames.get(0) + " " + removeHTML(awayTeam);
   }
   
   

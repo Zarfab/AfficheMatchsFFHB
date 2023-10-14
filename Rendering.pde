@@ -363,15 +363,8 @@ public PImage getMatchResultImage(MatchModel match, int w, int h) {
   pg.stroke(0);
   pg.strokeWeight(4);
   pg.rectMode(CENTER);
-  // home score rect
-  if(match.homeScore > match.awayScore) pg.fill(colorWin);
-  else if(match.homeScore < match.awayScore) pg.fill(colorLoose);
-  else pg.fill(colorDraw);
+  pg.fill(colors[2]);
   pg.rect(w/2-scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
-  // away score rect
-  if(match.homeScore < match.awayScore) pg.fill(colorWin);
-  else if(match.homeScore > match.awayScore) pg.fill(colorLoose);
-  else pg.fill(colorDraw);
   pg.rect(w/2+scoreRectW*0.75, h/2, scoreRectW, scoreRectH);
   pg.noStroke();
   
@@ -380,7 +373,13 @@ public PImage getMatchResultImage(MatchModel match, int w, int h) {
   pg.fill(0);
   pg.textSize(fitTextInSpace(pg, "44", 100, int(scoreRectW*0.8), int(scoreRectH*0.8)));
   pg.textAlign(CENTER, CENTER);
+    // home score
+  if(match.homeScore >= match.awayScore) pg.fill(colors[1]);
+  else pg.fill(colors[4]);
   pg.text(match.homeScore, w/2-scoreRectW*0.75, h/2);
+  // away score
+  if(match.awayScore >= match.homeScore) pg.fill(colors[1]);
+  else pg.fill(colors[4]);
   pg.text(match.awayScore, w/2+scoreRectW*0.75, h/2);
   
   pg.fill(colors[3]);
