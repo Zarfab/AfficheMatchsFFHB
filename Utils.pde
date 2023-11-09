@@ -12,7 +12,7 @@ public String capitalize(String input, boolean allWords) {
     String trimmed = input.trim();
     String words[] = trimmed.split(" ");
     for(int i = 0; i < words.length; i++) {
-      if( words[i].indexOf('.') < 0) {
+      if( words[i].indexOf('.') < 0 && words[i].length() > 0) {
         char firstChar = words[i].toUpperCase().charAt(0);
         words[i] = firstChar +  words[i].toLowerCase().substring(1);
       }
