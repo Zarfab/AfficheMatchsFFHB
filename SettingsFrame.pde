@@ -54,10 +54,10 @@ public class SettingsFrame extends JFrame implements ActionListener {
     JButton saveBut = new JButton("Sauvegarder image");
     saveBut.addActionListener(this);
     
-    JButton exitBut = new JButton("Quitter");
+    JButton exitBut = new JButton("<html><font color=red>Quitter");
     exitBut.addActionListener(this);
 
-    JPanel buttonPanel = new JPanel(new GridLayout(4, 3));
+    JPanel buttonPanel = new JPanel(new GridLayout(4, 3, 40, 2));
     buttonPanel.add(addFromCsv);
     buttonPanel.add(addFromUrl);
     buttonPanel.add(removeRow);
@@ -147,27 +147,25 @@ public class SettingsFrame extends JFrame implements ActionListener {
             //println("new mode : " + mode);
             break;
           case "Sauvegarder image" : 
-            String saveFile = (csvFileFolder == null? "" : csvFileFolder) 
+            File dir = booster.showDirectorySelection();
+            String saveFileWithoutExt = (dir == null? System.getProperty("user.home") : dir.getAbsolutePath()) + "/"
+                              + clubNames.get(0) + "_"
                               + nf(year, 4) 
                               + "-" + nf(week, 2) 
-                              + (mode == Mode.RESULTS ? "_resultats" : "")
-                              + ".png";
+                              + (mode == Mode.RESULTS ? "_resultats" : "");
+                              
+            String saveFile = saveFileWithoutExt + ".png";
             int it = 1;
             File f = new File(saveFile);
             while(f.exists()) {
-              saveFile = (csvFileFolder == null? "" : csvFileFolder) 
-                              + nf(year, 4) 
-                              + "-" + nf(week, 2) 
-                              + (mode == Mode.RESULTS ? "_resultats" : "")
-                              + "_" + it
-                              + ".png";
-              f = new File(saveFile);
+              String saveFileIt = saveFileWithoutExt + "_" + it + ".png";
+              f = new File(saveFileIt);
               it++;
             }
             getPoster().save(saveFile);
             booster.showInfoDialog("L'image a été sauvegardée \n" + saveFile);
             break;
-          case "Quitter" : 
+          case "<html><font color=red>Quitter" : 
             booster.showConfirmDialog(
                 "Voulez-vous vraiment quitter le programme ?",
                 "Quitter",
