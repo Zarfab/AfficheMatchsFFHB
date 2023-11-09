@@ -136,11 +136,21 @@ public class MatchTableModel extends AbstractTableModel {
       saveTable(table, fileName);
     }
     
+    
+    public void invertDisplaySelection() {
+      for(MatchModel m : matchs) {
+        m.toBeDisplayed = !m.toBeDisplayed;
+      }
+      fireTableDataChanged();
+    }
+    
+    
     @Override
     public boolean isCellEditable(int row, int col)
     {
         return true;
     }
+    
     
     @Override
     public String toString() {
