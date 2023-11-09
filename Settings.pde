@@ -29,8 +29,8 @@ public void loadSettings() {
   }
   
   XML[] nameVariants = settings.getChild("club").getChild("name").getChildren("nameVariant");
-  for(XML var : nameVariants) {
-    clubNames.append(var.getContent());
+  for(XML variant : nameVariants) {
+    clubNames.append(variant.getContent());
   }
   XML[] nameIgnore = settings.getChild("club").getChild("name").getChildren("ignore");
   for(XML ni : nameIgnore) {
