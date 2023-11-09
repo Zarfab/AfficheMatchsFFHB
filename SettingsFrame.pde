@@ -37,13 +37,16 @@ public class SettingsFrame extends JFrame implements ActionListener {
     JButton addFromUrl = new JButton("Ajouter URL");
     addFromUrl.setEnabled(true);
     addFromUrl.addActionListener(this);
-
-    JButton removeRow = new JButton("Supprimer la ligne");
-    removeRow.setEnabled(true);
-    removeRow.addActionListener(this);
     
     JButton saveCsv = new JButton("Enregistrer le tableau");
     saveCsv.addActionListener(this);
+    
+    JButton invertSelectionBut = new JButton("Inverser la selection");
+    invertSelectionBut.addActionListener(this);
+    
+    JButton removeRow = new JButton("Supprimer la ligne");
+    removeRow.setEnabled(true);
+    removeRow.addActionListener(this);
     
     JButton delTable = new JButton("Supprimer tout");
     delTable.addActionListener(this);
@@ -57,25 +60,31 @@ public class SettingsFrame extends JFrame implements ActionListener {
     JButton exitBut = new JButton("<html><font color=red>Quitter");
     exitBut.addActionListener(this);
 
-    JPanel buttonPanel = new JPanel(new GridLayout(4, 3, 40, 2));
-    buttonPanel.add(addFromCsv);
-    buttonPanel.add(addFromUrl);
-    buttonPanel.add(removeRow);
-
-    buttonPanel.add(saveCsv);
-    buttonPanel.add(new JLabel());
-    buttonPanel.add(delTable);
+    JPanel leftPanel = new JPanel(new GridLayout(0, 1, 20, 10));
+    leftPanel.add(new JLabel());
+    leftPanel.add(addFromCsv);
+    leftPanel.add(addFromUrl);
     
-    buttonPanel.add(new JLabel());
-    buttonPanel.add(new JLabel());
-    buttonPanel.add(new JLabel());
+    leftPanel.add(new JLabel());
+    leftPanel.add(saveCsv);
     
-    buttonPanel.add(modeBut);
-    buttonPanel.add(saveBut);
-    buttonPanel.add(exitBut);
+    leftPanel.add(new JLabel());
+    leftPanel.add(invertSelectionBut);
+    
+    leftPanel.add(new JLabel());
+    leftPanel.add(removeRow);
+    leftPanel.add(delTable);
+    leftPanel.add(new JLabel());
+    
+    JPanel bottomPanel = new JPanel(new GridLayout(1, 4, 40, 10));
+    bottomPanel.add(new JLabel());
+    bottomPanel.add(modeBut);
+    bottomPanel.add(saveBut);
+    bottomPanel.add(exitBut);
 
     panel.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-    panel.add(buttonPanel, BorderLayout.SOUTH);
+    panel.add(leftPanel, BorderLayout.WEST);
+    panel.add(bottomPanel, BorderLayout.SOUTH);
     
     getContentPane().add(panel, "Center"); 
     setSize(1200, 400); 
@@ -121,6 +130,9 @@ public class SettingsFrame extends JFrame implements ActionListener {
             model.saveTableAsCsv(filePath);
             booster.showInfoDialog("Le tableau a été sauvegardé sous\n" + filePath);
             break;
+          case "Inverser la selection":
+            model.invertDisplaySelection();
+            break;
           case "Supprimer la ligne": 
             model.removeRow(table.getSelectedRow());
             model.fireTableDataChanged();
@@ -148,22 +160,25 @@ public class SettingsFrame extends JFrame implements ActionListener {
             break;
           case "Sauvegarder image" : 
             File dir = booster.showDirectorySelection();
-            String saveFileWithoutExt = (dir == null? System.getProperty("user.home") : dir.getAbsolutePath()) + "/"
-                              + clubNames.get(0) + "_"
-                              + nf(year, 4) 
-                              + "-" + nf(week, 2) 
-                              + (mode == Mode.RESULTS ? "_resultats" : "");
-                              
-            String saveFile = saveFileWithoutExt + ".png";
-            int it = 1;
-            File f = new File(saveFile);
-            while(f.exists()) {
-              String saveFileIt = saveFileWithoutExt + "_" + it + ".png";
-              f = new File(saveFileIt);
-              it++;
+            if(dir != null) {
+              String saveFileWithoutExt = dir.getAbsolutePath() + "/"
+                                + clubNames.get(0) + "_"
+                                + nf(year, 4) 
+                                + "-" + nf(week, 2) 
+                                + (mode == Mode.RESULTS ? "_resultats" : "");
+                                
+              String saveFile = saveFileWithoutExt + ".png";
+              int it = 1;
+              String saveFileIt = saveFile;
+              File f = new File(saveFileIt);
+              while(f.exists()) {
+                saveFileIt = saveFileWithoutExt + "_" + it + ".png";
+                f = new File(saveFileIt);
+                it++;
+              }
+              getPoster().save(saveFileIt);
+              booster.showInfoDialog("L'image a été sauvegardée \n" + saveFileIt);
             }
-            getPoster().save(saveFile);
-            booster.showInfoDialog("L'image a été sauvegardée \n" + saveFile);
             break;
           case "<html><font color=red>Quitter" : 
             booster.showConfirmDialog(
