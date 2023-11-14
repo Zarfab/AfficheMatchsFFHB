@@ -195,9 +195,27 @@ public PImage getPosterToBePlayed(ArrayList<MatchModel> allMatchs) {
     pg.background(bg);
   else
     pg.background(colors[TO_BE_PLAYED]);
-    
+  
+  // club logo
   pg.imageMode(CENTER);
   pg.image(logo, pg.width/2, pg.height - (logo.height * 0.75));
+  
+  // sponsors
+  PImage sponsorLeft, sponsorRight;
+  if(sponsors.size() >= 1 && sponsorIndex < sponsors.size()) {
+    sponsorLeft = sponsors.get(sponsorIndex);
+    sponsorLeft.resize(0, round(logo.height*1.5));
+    pg.image(sponsorLeft, pg.width*0.1, pg.height - (sponsorLeft.height * 0.5));
+  }
+  if(sponsors.size() >= 2) {
+    int sponsorRIndex = sponsorIndex+1;
+    if(sponsorRIndex >= sponsors.size()) 
+      sponsorRIndex = 0;
+    sponsorRight = sponsors.get(sponsorRIndex);
+    sponsorRight.resize(0, round(logo.height*1.5));
+    pg.image(sponsorRight, pg.width*0.9, pg.height - (sponsorRight.height * 0.5));
+  }
+  
   
   int fontBaseSize = modeSet[TO_BE_PLAYED].fontBaseSize;
   // Title and subtitle

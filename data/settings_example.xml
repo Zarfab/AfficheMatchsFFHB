@@ -46,6 +46,11 @@
 		</colors>
 		<!-- logo du club à placer dans le même répertoire que ce fichier -->
 		<logo>logo_example.png</logo>
+		<sponsors>
+			<sponsor>sponsors/examples/01.png</sponsor>
+			<sponsor>sponsors/examples/02.png</sponsor>
+			<sponsor>sponsors/examples/03.png</sponsor>
+		</sponsors>
 		<background mode="0">background0_example.png</background>
 		<background mode="1">background1_example.png</background>
 	</club>

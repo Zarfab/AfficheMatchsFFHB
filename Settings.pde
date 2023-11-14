@@ -4,6 +4,8 @@ color[] colors;
 int nbColors = 0;
 
 PImage logo, logoOrg;
+ArrayList<PImage> sponsors;
+int sponsorIndex = 0;
 
 public class ModeSettings {
   public PImage bg;
@@ -57,6 +59,17 @@ public void loadSettings() {
   String logoPath = settings.getChild("club").getChild("logo").getContent();
   logo = loadImage(logoPath);
   logoOrg = loadImage(logoPath);
+  
+  sponsors = new ArrayList<PImage>();
+  XML[] sponsorsXml = settings.getChild("club").getChild("sponsors").getChildren("sponsor");
+  for(XML sponsorXML : sponsorsXml) {
+    String filePath = sponsorXML.getContent();
+    if(filePath != null && filePath != "") {
+      PImage sponImg = loadImage(filePath);
+      sponsors.add(sponImg);
+    }
+  }
+  
   XML[] backgrounds = settings.getChild("club").getChildren("background");
   for(XML bg : backgrounds) {
     String bgPath = bg.getContent();

@@ -43,6 +43,8 @@ public class SettingsFrame extends JFrame implements ActionListener {
     
     JButton invertSelectionBut = new JButton("Inverser la selection");
     invertSelectionBut.addActionListener(this);
+    JButton nextSponsorsBut = new JButton("Sponsors suivants");
+    nextSponsorsBut.addActionListener(this);
     
     JButton removeRow = new JButton("Supprimer la ligne");
     removeRow.setEnabled(true);
@@ -70,6 +72,7 @@ public class SettingsFrame extends JFrame implements ActionListener {
     
     leftPanel.add(new JLabel());
     leftPanel.add(invertSelectionBut);
+    leftPanel.add(nextSponsorsBut);
     
     leftPanel.add(new JLabel());
     leftPanel.add(removeRow);
@@ -132,6 +135,11 @@ public class SettingsFrame extends JFrame implements ActionListener {
             break;
           case "Inverser la selection":
             model.invertDisplaySelection();
+            break;
+          case "Sponsors suivants":
+            sponsorIndex++;
+            if(sponsorIndex >= sponsors.size())
+              sponsorIndex = 0;
             break;
           case "Supprimer la ligne": 
             model.removeRow(table.getSelectedRow());
